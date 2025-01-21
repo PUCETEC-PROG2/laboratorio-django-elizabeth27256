@@ -76,35 +76,35 @@ class CustomLoginView(LoginView):
 @login_required
 def add_trainer(request):
     if request.method == "POST":
-        form = TrainerForm(request.POST, request.FILES)  # El formulario para agregar un entrenador
+        form = TrainerForm(request.POST, request.FILES)  
         if form.is_valid():
-            form.save()  # Guarda el nuevo entrenador
-            return redirect('pokedex:trainers')  # Redirige a la lista de entrenadores
+            form.save()  
+            return redirect('pokedex:trainers') 
     else:
-        form = TrainerForm()  # Muestra un formulario vacío
+        form = TrainerForm() 
     return render(request, 'trainer_form.html', {'form': form})
 
 
 @login_required
 def edit_trainer(request, trainer_id):
-    trainer = Trainer.objects.get(id=trainer_id)  # Obtiene el entrenador por ID
+    trainer = Trainer.objects.get(id=trainer_id)  
 
     if request.method == "POST":
-        form = TrainerForm(request.POST, request.FILES, instance=trainer)  # Rellena el formulario con los datos existentes
+        form = TrainerForm(request.POST, request.FILES, instance=trainer)  
         if form.is_valid():
-            form.save()  # Guarda los cambios
-            return redirect('pokedex:trainers')  # Redirige a la lista de entrenadores
+            form.save()  
+            return redirect('pokedex:trainers')  
     else:
-        form = TrainerForm(instance=trainer)  # Si es un GET, muestra el formulario con los datos actuales
+        form = TrainerForm(instance=trainer)  
 
     return render(request, 'trainer_form.html', {'form': form})
 
 
 @login_required
 def delete_trainer(request, trainer_id):
-    trainer = Trainer.objects.get(id=trainer_id)  # Obtiene el entrenador por ID
-    trainer.delete()  # Elimina el entrenador
-    return redirect('pokedex:trainers')  # Redirige a la lista de entrenadores
+    trainer = Trainer.objects.get(id=trainer_id)  
+    trainer.delete()  
+    return redirect('pokedex:trainers')  
 
 
     

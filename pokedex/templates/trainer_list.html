@@ -24,8 +24,8 @@
                             <p class="card-text">Edad: {{ trainer.age }}</p>
                             <p class="card-text">Nivel: {{ trainer.level }}</p>
                             {% if user.is_authenticated %}
-                                <a href="{% url 'pokedex:edit_trainer' trainer.id %}" class="btn btn-warning">Editar</a>
-                                <a href="{% url 'pokedex:delete_trainer' trainer.id %}" class="btn btn-danger" onclick="return confirm('¿Estás seguro de eliminar a este entrenador?');">Eliminar</a>
+                                <a href="{% url 'pokedex:edit_trainer' trainer.id %}" class="btn btn-warning"><i class="fa-solid fa-pencil"></i></a>
+                                <a href="{% url 'pokedex:delete_trainer' trainer.id %}" class="btn btn-danger"><i class="fa-solid fa-trash"></i></a>
                             {% endif %}
                         </div>
                     </div>
