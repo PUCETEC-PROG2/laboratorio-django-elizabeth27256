@@ -71,8 +71,8 @@ def delete_pokemon(request, pokemon_id):
 class CustomLoginView(LoginView):
      template_name = "login_form.html"
 
-#entrenador
 
+#Entrenadores
 @login_required
 def add_trainer(request):
     if request.method == "POST":
