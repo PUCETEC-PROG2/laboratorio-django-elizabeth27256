@@ -4,17 +4,23 @@ from .models import Pokemon, Trainer
 from django.shortcuts import redirect, render
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.decorators import login_required
-from pokedex.forms import PokemonForm
+from pokedex.forms import PokemonForm, TrainerForm
 
 def index(request):
     pokemons = Pokemon.objects.all()
-    trainers = Trainer.objects.all()
     template = loader.get_template('index.html')
     return HttpResponse(template.render({
         'pokemons': pokemons,
-        'trainers' : trainers
-    }, 
-    request))
+        }, 
+     request))
+
+def trainers(request):
+    trainers = Trainer.objects.all()
+    template = loader.get_template('trainer_list.html')
+    return HttpResponse(template.render({
+        'trainers':trainers,
+        },
+        request))
 
 def pokemon(request, pokemon_id):
     pokemon = Pokemon.objects.get(id = pokemon_id)
@@ -53,6 +59,7 @@ def edit_pokemon(request, pokemon_id):
              return redirect('pokedex:index')
     else:
             form = PokemonForm(instance=pokemon)
+            
     return render(request, 'pokemon_form.html', {'form': form})
 
 @login_required
@@ -63,6 +70,43 @@ def delete_pokemon(request, pokemon_id):
 
 class CustomLoginView(LoginView):
      template_name = "login_form.html"
+
+#entrenador
+
+@login_required
+def add_trainer(request):
+    if request.method == "POST":
+        form = TrainerForm(request.POST, request.FILES)  # El formulario para agregar un entrenador
+        if form.is_valid():
+            form.save()  # Guarda el nuevo entrenador
+            return redirect('pokedex:trainers')  # Redirige a la lista de entrenadores
+    else:
+        form = TrainerForm()  # Muestra un formulario vacío
+    return render(request, 'trainer_form.html', {'form': form})
+
+
+@login_required
+def edit_trainer(request, trainer_id):
+    trainer = Trainer.objects.get(id=trainer_id)  # Obtiene el entrenador por ID
+
+    if request.method == "POST":
+        form = TrainerForm(request.POST, request.FILES, instance=trainer)  # Rellena el formulario con los datos existentes
+        if form.is_valid():
+            form.save()  # Guarda los cambios
+            return redirect('pokedex:trainers')  # Redirige a la lista de entrenadores
+    else:
+        form = TrainerForm(instance=trainer)  # Si es un GET, muestra el formulario con los datos actuales
+
+    return render(request, 'trainer_form.html', {'form': form})
+
+
+@login_required
+def delete_trainer(request, trainer_id):
+    trainer = Trainer.objects.get(id=trainer_id)  # Obtiene el entrenador por ID
+    trainer.delete()  # Elimina el entrenador
+    return redirect('pokedex:trainers')  # Redirige a la lista de entrenadores
+
+
     
 
     
